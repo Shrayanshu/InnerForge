@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Share2, Dumbbell, Zap, Trophy, Timer, Quote, Edit3, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Dumbbell, Zap, Trophy, Timer, Quote, Edit3, TrendingUp } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { calculateXP } from '../utils/xp';
 
@@ -68,9 +68,6 @@ export function WeeklyEvaluationScreen() {
           Weekly Evaluation
         </h2>
         <div className="flex w-12 items-center justify-end">
-          <button className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-            <Share2 className="w-5 h-5" />
-          </button>
         </div>
       </header>
 

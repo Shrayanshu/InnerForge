@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Settings, Shield, LogOut, Activity } from 'lucide-react';
+import { User, Shield, Activity } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
 export function ProfileScreen() {
@@ -16,9 +16,6 @@ export function ProfileScreen() {
           Profile
         </h2>
         <div className="flex w-12 items-center justify-end">
-          <button className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-            <Settings className="w-5 h-5" />
-          </button>
         </div>
       </header>
 
@@ -70,18 +67,6 @@ export function ProfileScreen() {
               {mainFocus || 'Focusing on daily consistency.'}
             </p>
           </section>
-        </div>
-
-        {/* Settings / Actions */}
-        <div className="p-6 space-y-4 border-t border-primary/10">
-          <button className="w-full flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700 hover:bg-slate-800 transition-colors">
-            <span className="font-bold text-slate-300">Account Settings</span>
-            <Settings className="w-5 h-5 text-slate-500" />
-          </button>
-          <button className="w-full flex items-center justify-between p-4 bg-red-500/10 rounded-xl border border-red-500/20 hover:bg-red-500/20 transition-colors text-red-500">
-            <span className="font-bold">Log Out</span>
-            <LogOut className="w-5 h-5" />
-          </button>
         </div>
       </main>
     </div>

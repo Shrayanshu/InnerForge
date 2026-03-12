@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../store/useStore';
 
 export function TrainingLogScreen() {
-  const { disciplines, selectedDisciplineId, setSelectedDisciplineId, honorDisciplineWithValue } = useStore();
+  const { disciplines, selectedDisciplineId, setSelectedDisciplineId, honorDisciplineWithValue, setActiveTab } = useStore();
   const [inputValue, setInputValue] = useState<string>('');
   const [isHonored, setIsHonored] = useState(false);
 
@@ -36,11 +36,6 @@ export function TrainingLogScreen() {
       honorDisciplineWithValue(discipline.id, enteredValue);
       setIsHonored(true);
     }
-  };
-
-  const handleRecordMissed = () => {
-    // We don't record a completion, just close the screen
-    setSelectedDisciplineId(null);
   };
 
   const handleContinueTraining = () => {
@@ -154,7 +149,10 @@ export function TrainingLogScreen() {
                         Continue Training
                       </button>
                       <button 
-                        onClick={handleRecordMissed}
+                        onClick={() => {
+                          setSelectedDisciplineId(null);
+                          setActiveTab('progress');
+                        }}
                         className="w-full bg-transparent border border-primary/30 text-primary font-bold py-4 rounded-lg transition-all uppercase tracking-widest text-sm hover:bg-primary/10"
                       >
                         Record as Missed Day
@@ -179,7 +177,10 @@ export function TrainingLogScreen() {
                         "The vow is small so you never fail.<br/>Anything beyond it is a bonus."
                       </p>
                       <button 
-                        onClick={() => setSelectedDisciplineId(null)}
+                        onClick={() => {
+                          setSelectedDisciplineId(null);
+                          setActiveTab('progress');
+                        }}
                         className="w-full bg-primary text-background-dark font-bold py-4 rounded-lg shadow-lg shadow-primary/20 transition-all uppercase tracking-widest text-sm"
                       >
                         Return to the Forge
