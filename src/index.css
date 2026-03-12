@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #f48c25;
+  --color-background-light: #f8f7f5;
+  --color-background-dark: #221910;
+  --color-surface-dark: #2d2319;
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+body {
+  @apply bg-background-dark text-slate-100 font-display antialiased;
+  min-height: max(884px, 100dvh);
+}
