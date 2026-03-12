@@ -14,8 +14,8 @@ export default defineConfig(({mode}) => {
         registerType: 'prompt',
         includeAssets: ['icon.svg'],
         manifest: {
-          name: 'Warrior Grounds',
-          short_name: 'Warrior',
+          name: 'InnerForge',
+          short_name: 'InnerForge',
           description: 'Discipline and habit tracking for the modern warrior.',
           theme_color: '#0f172a',
           background_color: '#0f172a',

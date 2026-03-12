@@ -15,7 +15,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Top Navigation */}
       <nav className="flex items-center bg-background-dark p-4 justify-center sticky top-0 z-50 border-b border-primary/10">
         <h2 className="text-slate-100 text-lg font-bold leading-tight tracking-widest text-center uppercase">
-          Warrior Grounds
+          InnerForge
         </h2>
       </nav>
 

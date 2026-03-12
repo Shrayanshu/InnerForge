@@ -51,7 +51,7 @@ export function PWAInstallPrompt() {
           <Download className="w-6 h-6" />
         </div>
         <div>
-          <h3 className="text-slate-100 font-bold text-sm">Install Warrior Grounds</h3>
+          <h3 className="text-slate-100 font-bold text-sm">Install InnerForge</h3>
           <p className="text-slate-400 text-xs">Add to your home screen for quick access.</p>
         </div>
       </div>
