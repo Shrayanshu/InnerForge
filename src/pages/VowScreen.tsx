@@ -56,10 +56,6 @@ export function VowScreen() {
             <div className="flex flex-col gap-3 p-6 bg-surface-dark/40">
               <div className="flex gap-6 justify-between items-end">
                 <p className="text-primary text-sm font-bold uppercase tracking-widest">Training Progress</p>
-                <p className="text-slate-400 text-sm font-medium">Step 4 of 5</p>
-              </div>
-              <div className="rounded-full bg-primary/20 h-2 overflow-hidden">
-                <div className="h-full rounded-full bg-primary" style={{ width: '80%' }}></div>
               </div>
             </div>
 
@@ -89,9 +85,10 @@ export function VowScreen() {
                 {/* The Discipline Reminder */}
                 <div className="bg-surface-dark/40 border border-primary/20 p-6 rounded-xl mb-8 w-full max-w-md">
                   <p className="text-slate-300 text-lg font-medium leading-relaxed italic">
-                    "When <span className="text-primary font-bold">{currentDiscipline.cue.toLowerCase()}</span>, 
-                    I will <span className="text-primary font-bold">{currentDiscipline.action.toLowerCase()}</span> 
-                    at <span className="text-primary font-bold">{currentDiscipline.location.toLowerCase()}</span>."
+                    "<span className="text-primary font-bold">{currentDiscipline.cue}</span> — I will <span className="text-primary font-bold">{currentDiscipline.action}</span>."
+                  </p>
+                  <p className="text-sm text-slate-500 mt-3 font-medium uppercase tracking-widest">
+                    Location: <span className="text-slate-300">{currentDiscipline.location}</span>
                   </p>
                 </div>
 

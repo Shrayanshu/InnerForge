@@ -64,9 +64,6 @@ export function WelcomeScreen() {
           >
             START THE TRIAL
           </button>
-          <button className="bg-transparent border-2 border-primary text-primary hover:bg-primary/10 font-bold py-4 px-8 rounded-lg transition-all">
-            OUR MANIFESTO
-          </button>
         </div>
       </motion.div>
 
@@ -133,7 +130,7 @@ export function WelcomeScreen() {
             <div className="md:w-1/2 p-8 flex flex-col justify-center">
               <h3 className="text-primary text-2xl font-bold mb-2">The Apprentice Path</h3>
               <p className="text-slate-300 mb-6">Begin your journey with the fundamental 7-day fire walk. Master the basic strikes and the iron mindset required to survive the forge.</p>
-              <div className="inline-flex items-center text-primary font-bold gap-2 group/link">
+              <div className="inline-flex items-center text-primary font-bold gap-2 group/link cursor-pointer" onClick={startTrial}>
                 ENTER THE DOJO
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
               </div>

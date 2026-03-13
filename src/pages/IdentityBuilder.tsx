@@ -21,10 +21,6 @@ export function IdentityBuilder() {
       <div className="flex flex-col gap-3 p-6 max-w-2xl mx-auto">
         <div className="flex gap-6 justify-between items-center">
           <p className="text-primary text-base font-semibold uppercase tracking-widest">Warrior Path</p>
-          <p className="text-slate-400 text-sm font-medium">Stage 1 of 4</p>
-        </div>
-        <div className="rounded-full bg-primary/20 h-3 overflow-hidden">
-          <div className="h-full rounded-full bg-primary w-1/4"></div>
         </div>
       </div>
 

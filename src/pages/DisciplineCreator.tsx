@@ -91,9 +91,6 @@ export function DisciplineCreator() {
           Warrior Training
         </h2>
         <div className="flex w-12 items-center justify-end">
-          <button className="flex items-center justify-center rounded-lg h-12 text-primary p-2 hover:bg-primary/10 transition-colors">
-            <HelpCircle className="w-6 h-6" />
-          </button>
         </div>
       </div>
 

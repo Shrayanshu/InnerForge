@@ -213,11 +213,14 @@ export function TodayDashboard() {
                 </div>
                 
                 <div className="flex-1 min-w-0">
-                  <p className={`font-bold truncate ${isCompleted ? 'text-slate-300 line-through' : isSkipped ? 'text-slate-500' : 'text-slate-100'}`}>
+                  <p className={`font-bold ${isCompleted ? 'text-slate-300 line-through' : isSkipped ? 'text-slate-500' : 'text-slate-100'}`}>
                     {discipline.name}
                   </p>
-                  <p className={`text-xs truncate ${isSkipped ? 'text-slate-600' : 'text-slate-500'}`}>
-                    {discipline.cue} → {discipline.action}
+                  <p className={`text-xs mt-1 leading-relaxed ${isSkipped ? 'text-slate-600' : 'text-slate-400'}`}>
+                    <span className="font-semibold text-primary/80">{discipline.cue}</span> — I will <span className="font-semibold text-primary/80">{discipline.action}</span>.
+                  </p>
+                  <p className={`text-[10px] mt-1 uppercase tracking-widest ${isSkipped ? 'text-slate-700' : 'text-slate-500'}`}>
+                    {discipline.location}
                   </p>
                 </div>
                 

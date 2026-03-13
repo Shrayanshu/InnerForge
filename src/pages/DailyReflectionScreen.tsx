@@ -33,9 +33,6 @@ export function DailyReflectionScreen() {
           Daily Reflection
         </h1>
         <div className="flex size-12 items-center justify-end">
-          <button className="text-slate-100 hover:text-primary transition-colors">
-            <Calendar className="w-6 h-6" />
-          </button>
         </div>
       </header>
 
