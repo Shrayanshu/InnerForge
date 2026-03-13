@@ -37,6 +37,7 @@ interface AppState {
   disciplines: Discipline[];
   completions: Record<string, string[]>;
   completionValues: Record<string, Record<string, number>>;
+  skipped: Record<string, string[]>;
   
   dailyReflections: DailyReflection[];
   weeklyReflections: WeeklyReflection[];
@@ -58,6 +59,7 @@ interface AppState {
   updateDiscipline: (id: string, updates: Partial<Omit<Discipline, 'id' | 'createdAt' | 'status'>>) => void;
   honorDiscipline: (id: string) => void;
   honorDisciplineWithValue: (id: string, value: number) => void;
+  skipDiscipline: (id: string) => void;
   
   addDailyReflection: (reflection: Omit<DailyReflection, 'id' | 'date'>) => void;
   addWeeklyReflection: (reflection: Omit<WeeklyReflection, 'id' | 'date'>) => void;
@@ -85,6 +87,7 @@ export const useStore = create<AppState>()(
       disciplines: [],
       completions: {},
       completionValues: {},
+      skipped: {},
       
       dailyReflections: [],
       weeklyReflections: [],
@@ -143,6 +146,7 @@ export const useStore = create<AppState>()(
         const today = new Date().toISOString().split('T')[0];
         const currentCompletions = state.completions[id] || [];
         const currentValues = state.completionValues[id] || {};
+        const currentSkipped = state.skipped[id] || [];
         
         return {
           completions: {
@@ -155,8 +159,31 @@ export const useStore = create<AppState>()(
               ...currentValues,
               [today]: value
             }
+          },
+          skipped: {
+            ...state.skipped,
+            [id]: currentSkipped.filter(d => d !== today)
           }
         };
+      }),
+      skipDiscipline: (id) => set((state) => {
+        const today = new Date().toISOString().split('T')[0];
+        const currentSkipped = state.skipped[id] || [];
+        const currentCompletions = state.completions[id] || [];
+        
+        if (!currentSkipped.includes(today)) {
+          return {
+            skipped: {
+              ...state.skipped,
+              [id]: [...currentSkipped, today]
+            },
+            completions: {
+              ...state.completions,
+              [id]: currentCompletions.filter(d => d !== today)
+            }
+          };
+        }
+        return state;
       }),
       
       addDailyReflection: (reflection) => set((state) => {

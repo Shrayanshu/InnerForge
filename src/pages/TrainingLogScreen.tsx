@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../store/useStore';
 
 export function TrainingLogScreen() {
-  const { disciplines, selectedDisciplineId, setSelectedDisciplineId, honorDisciplineWithValue, setActiveTab } = useStore();
+  const { disciplines, selectedDisciplineId, setSelectedDisciplineId, honorDisciplineWithValue, setActiveTab, skipDiscipline } = useStore();
   const [inputValue, setInputValue] = useState<string>('');
   const [isHonored, setIsHonored] = useState(false);
 
@@ -124,6 +124,16 @@ export function TrainingLogScreen() {
                   <ShieldCheck className="w-5 h-5" />
                   Record Training
                 </button>
+
+                <button 
+                  onClick={() => {
+                    skipDiscipline(discipline.id);
+                    setSelectedDisciplineId(null);
+                  }}
+                  className="w-full mt-4 bg-transparent text-slate-500 font-bold py-4 rounded-lg transition-all uppercase tracking-widest text-sm hover:text-slate-300"
+                >
+                  Skip Today
+                </button>
               </motion.div>
             ) : (
               <motion.div 
@@ -166,11 +176,12 @@ export function TrainingLogScreen() {
                       <p className="font-bold uppercase tracking-widest text-lg">Discipline Honored</p>
                     </div>
                     
-                    <p className="text-slate-300 text-lg mb-6">
+                    <p className="text-slate-300 text-lg mb-2">
                       {isExceeded 
                         ? "You exceeded your vow."
                         : "You kept your word."}
                     </p>
+                    <p className="text-primary font-bold text-xl mb-6">+50 XP earned</p>
                     
                     <div className="pt-8 border-t border-primary/10 mt-8">
                       <p className="text-sm text-primary/60 italic leading-relaxed mb-8">

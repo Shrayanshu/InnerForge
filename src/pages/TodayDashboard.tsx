@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../store/useStore';
-import { Flame, Check, Dumbbell } from 'lucide-react';
+import { Flame, Check, Dumbbell, Plus, Minus } from 'lucide-react';
 
 const greetings = [
   "The forge awaits.",
@@ -55,7 +55,7 @@ const Embers = () => {
 };
 
 export function TodayDashboard() {
-  const { identityStatement, disciplines, completions, setSelectedDisciplineId, setIsReflectingDaily, dailyReflections } = useStore();
+  const { coreValues, identityStatement, disciplines, completions, skipped, setSelectedDisciplineId, setIsReflectingDaily, setIsCreatingDiscipline, dailyReflections } = useStore();
   const [toast, setToast] = useState<string | null>(null);
   const [greeting] = useState(() => greetings[Math.floor(Math.random() * greetings.length)]);
 
@@ -84,12 +84,30 @@ export function TodayDashboard() {
     setSelectedDisciplineId(id);
   };
 
+  const getManifesto = () => {
+    if (coreValues.length === 0) return "I am forging my path through discipline every day.";
+    if (coreValues.length === 1) return `I am becoming someone who embodies ${coreValues[0].toLowerCase()} every day.`;
+    if (coreValues.length === 2) return `I am becoming someone who embodies ${coreValues[0].toLowerCase()} and ${coreValues[1].toLowerCase()} every day.`;
+    
+    const last = coreValues[coreValues.length - 1];
+    const rest = coreValues.slice(0, -1).map(v => v.toLowerCase()).join(', ');
+    return `I am becoming someone who embodies ${rest}, and ${last.toLowerCase()} every day.`;
+  };
+
   const progressPercentage = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
   const strokeDasharray = 552.92;
   const strokeDashoffset = strokeDasharray - (strokeDasharray * progressPercentage) / 100;
+  
+  const xpToday = (completedCount * 50) + (existingReflection ? 100 : 0);
 
   return (
     <div className="flex flex-col w-full">
+      {/* Discipline Manifesto */}
+      <div className="px-6 pt-8 pb-4 w-full text-center relative z-10">
+        <p className="text-slate-300 text-lg italic font-medium max-w-md mx-auto leading-relaxed opacity-90">
+          "{getManifesto()}"
+        </p>
+      </div>
       {/* Toast Notification */}
       <AnimatePresence>
         {toast && (
@@ -150,15 +168,22 @@ export function TodayDashboard() {
       </div>
 
       {/* Identity Banner */}
-      <div className="px-6 py-2 w-full text-center mb-6">
+      <div className="px-6 py-2 w-full text-center mb-6 hidden">
         <p className="text-primary/60 text-xs font-bold uppercase tracking-widest mb-2">Who you are becoming</p>
         <p className="text-slate-300 text-base italic font-medium max-w-sm mx-auto">"{identityStatement}"</p>
       </div>
 
-      {/* Forge Progress Section */}
-      <div className="px-6 py-4 text-center">
-        <h3 className="text-primary/60 text-xs font-bold uppercase tracking-widest mb-2">Forge Progress</h3>
-        <p className="text-slate-100 text-lg font-bold">{completedCount} / {totalCount} disciplines honored</p>
+      {/* Daily Progress Indicator */}
+      <div className="px-6 py-4 flex justify-between items-center border-y border-primary/10 bg-primary/5 mx-6 rounded-xl mb-6">
+        <div className="flex flex-col">
+          <span className="text-primary/60 text-xs font-bold uppercase tracking-widest">Disciplines</span>
+          <span className="text-slate-100 text-lg font-bold">{completedCount} / {totalCount}</span>
+        </div>
+        <div className="h-8 w-px bg-primary/20"></div>
+        <div className="flex flex-col text-right">
+          <span className="text-primary/60 text-xs font-bold uppercase tracking-widest">XP Today</span>
+          <span className="text-slate-100 text-lg font-bold">+{xpToday}</span>
+        </div>
       </div>
 
       {/* Daily Disciplines */}
@@ -166,6 +191,7 @@ export function TodayDashboard() {
         <div className="flex flex-col gap-3">
           {activeDisciplines.map((discipline) => {
             const isCompleted = completions[discipline.id]?.includes(today);
+            const isSkipped = skipped?.[discipline.id]?.includes(today);
             
             return (
               <motion.div 
@@ -175,20 +201,22 @@ export function TodayDashboard() {
                 className={`flex items-center gap-4 p-4 rounded-xl border transition-all cursor-pointer ${
                   isCompleted 
                     ? 'bg-primary/5 border-primary/30 opacity-70' 
+                    : isSkipped
+                    ? 'bg-surface-dark border-dashed border-slate-700 opacity-50'
                     : 'bg-surface-dark border-primary/10 hover:border-primary/30'
                 }`}
               >
                 <div className={`flex size-12 shrink-0 items-center justify-center rounded-lg ${
-                  isCompleted ? 'bg-primary text-background-dark' : 'bg-primary/20 text-primary'
+                  isCompleted ? 'bg-primary text-background-dark' : isSkipped ? 'bg-slate-800 text-slate-500' : 'bg-primary/20 text-primary'
                 }`}>
                   <Dumbbell className="w-6 h-6" />
                 </div>
                 
                 <div className="flex-1 min-w-0">
-                  <p className={`font-bold truncate ${isCompleted ? 'text-slate-300 line-through' : 'text-slate-100'}`}>
+                  <p className={`font-bold truncate ${isCompleted ? 'text-slate-300 line-through' : isSkipped ? 'text-slate-500' : 'text-slate-100'}`}>
                     {discipline.name}
                   </p>
-                  <p className="text-slate-500 text-xs truncate">
+                  <p className={`text-xs truncate ${isSkipped ? 'text-slate-600' : 'text-slate-500'}`}>
                     {discipline.cue} → {discipline.action}
                   </p>
                 </div>
@@ -197,10 +225,12 @@ export function TodayDashboard() {
                   className={`flex items-center justify-center size-8 shrink-0 rounded-full border-2 transition-all ${
                     isCompleted 
                       ? 'border-primary bg-primary text-background-dark' 
+                      : isSkipped
+                      ? 'border-slate-600 text-slate-500 bg-slate-800'
                       : 'border-primary/30 text-transparent'
                   }`}
                 >
-                  <Check className="w-5 h-5" />
+                  {isSkipped ? <Minus className="w-4 h-4" /> : <Check className="w-5 h-5" />}
                 </div>
               </motion.div>
             );
@@ -208,9 +238,19 @@ export function TodayDashboard() {
           
           {activeDisciplines.length === 0 && (
             <div className="text-center py-8 text-slate-500 italic">
-              No active disciplines. Forge a new one in the Training tab.
+              No active disciplines. Forge a new one to begin.
             </div>
           )}
+
+          {/* Forge New Discipline Button */}
+          <motion.button
+            layout
+            onClick={() => setIsCreatingDiscipline(true)}
+            className="w-full mt-4 py-4 rounded-xl border border-dashed border-primary/30 text-primary/70 hover:text-primary hover:border-primary/60 hover:bg-primary/5 transition-all flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-sm"
+          >
+            <Plus className="w-5 h-5" />
+            Forge New Discipline
+          </motion.button>
         </div>
       </div>
 

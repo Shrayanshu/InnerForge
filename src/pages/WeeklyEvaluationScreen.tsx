@@ -4,7 +4,7 @@ import { useStore } from '../store/useStore';
 import { calculateXP } from '../utils/xp';
 
 export function WeeklyEvaluationScreen() {
-  const { setIsReflectingWeekly, addWeeklyReflection, disciplines, completions, dailyReflections, weeklyReflections } = useStore();
+  const { setIsReflectingWeekly, addWeeklyReflection, disciplines, completions, skipped, dailyReflections, weeklyReflections } = useStore();
   const [isRecording, setIsRecording] = useState(false);
   const [reflection, setReflection] = useState('');
 
@@ -44,6 +44,44 @@ export function WeeklyEvaluationScreen() {
     const hasWorkout = activeDisciplines.some(disc => completions[disc.id]?.includes(dStr));
     if (hasWorkout) daysWithWorkout++;
   }
+
+  // Calculate frequently skipped and consistently completed
+  let mostSkipped: { disc: any, count: number } | null = null;
+  let mostCompleted: { disc: any, count: number } | null = null;
+
+  activeDisciplines.forEach(disc => {
+    let skipCount = 0;
+    let compCount = 0;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dStr = d.toISOString().split('T')[0];
+      
+      if (skipped?.[disc.id]?.includes(dStr)) {
+        skipCount++;
+      }
+      if (completions[disc.id]?.includes(dStr)) {
+        compCount++;
+      }
+    }
+    
+    if (!mostSkipped || skipCount > mostSkipped.count) {
+      mostSkipped = { disc, count: skipCount };
+    }
+    if (!mostCompleted || compCount > mostCompleted.count) {
+      mostCompleted = { disc, count: compCount };
+    }
+  });
+
+  const generateInsight = () => {
+    if (mostSkipped && mostSkipped.count >= 2) {
+      return `You skipped ${mostSkipped.disc.name} ${mostSkipped.count} times this week. Consider reducing the tiny version to make it easier to start.`;
+    }
+    if (mostCompleted && mostCompleted.count >= 5) {
+      return `You consistently completed ${mostCompleted.disc.name} this week. Your discipline is forging a strong habit.`;
+    }
+    return "You are building your foundation. Keep tracking your disciplines to reveal patterns in your behavior.";
+  };
 
   const handleRecord = () => {
     if (isRecording && reflection) {
@@ -122,6 +160,21 @@ export function WeeklyEvaluationScreen() {
               <p className="text-slate-400 text-sm font-medium">Focus Time</p>
             </div>
             <p className="text-slate-100 text-2xl font-bold">{last7DaysCompletions * 0.5}h</p>
+          </div>
+        </div>
+
+        {/* Weekly Insight */}
+        <div className="px-4 py-4">
+          <div className="bg-primary/10 border border-primary/20 rounded-xl p-5 flex gap-4 items-start">
+            <div className="bg-primary text-background-dark rounded-full p-2 flex items-center justify-center shrink-0">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-1">Weekly Insight</h4>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                {generateInsight()}
+              </p>
+            </div>
           </div>
         </div>
 
